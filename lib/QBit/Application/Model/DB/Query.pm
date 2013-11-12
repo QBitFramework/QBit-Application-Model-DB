@@ -210,7 +210,7 @@ sub get_sql_with_data {
         push(@sql_data, @vt_data);
     } else {
         $sql .=
-            ' ' 
+            ' '
           . $self->quote_identifier($select_query_table->{'table'}->name)
           . (
             exists($select_query_table->{'alias'})
@@ -229,7 +229,7 @@ sub get_sql_with_data {
             push(@sql_data, @vt_data);
         } else {
             $sql .=
-                ' ' 
+                ' '
               . $self->quote_identifier($table->{'table'}->name)
               . (
                 exists($table->{'alias'})
