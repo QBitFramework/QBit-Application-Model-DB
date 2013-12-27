@@ -184,7 +184,7 @@ sub create_sql {
 
     if ( $type ) {
       $meta->{'tables'} = {
-        map { (exists $meta->{'tables'}{$_}{'type'} && $meta->{'tables'}{$_}{'type'} eq 'MultistateActionLog' )
+        map { (exists $meta->{'tables'}{$_}{'type'} && $meta->{'tables'}{$_}{'type'} eq $type )
         ?  ($_ => $meta->{$_}) : () } keys %{$meta->{'tables'}} };
     }
 
