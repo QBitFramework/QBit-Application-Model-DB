@@ -174,13 +174,19 @@ sub transaction {
 }
 
 sub create_sql {
-    my ($self) = @_;
+    my ($self, $type) = @_;
 
     $self->_connect();
 
     my $SQL = '';
 
     my $meta = $self->get_all_meta();
+
+    if ( $type ) {
+      $meta->{'tables'} = {
+        map { (exists $meta->{'tables'}{$_}{'type'} && $meta->{'tables'}{$_}{'type'} eq $type )
+        ?  ($_ => $meta->{$_}) : () } keys %{$meta->{'tables'}} };
+    }
 
     $SQL .= join("\n\n", map {$self->$_->create_sql()} $self->_sorted_tables(keys(%{$meta->{'tables'}})))
       if exists($meta->{'tables'});
