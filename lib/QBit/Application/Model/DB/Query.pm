@@ -207,6 +207,10 @@ sub get_sql_with_data {
         }
     }
 
+    unless(%all_fields) {
+        $all_fields{'stub'} = [1];
+    }
+
     $sql .= "\n$offset    " . CORE::join(",\n$offset    ", map {@{$all_fields{$_}}} sort keys(%all_fields));
     my ($select_query_table, @join_query_tables) = @{$self->{'__TABLES__'}};
     $sql .= "\n${offset}FROM";
