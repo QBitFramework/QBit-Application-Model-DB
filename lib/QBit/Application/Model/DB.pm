@@ -174,7 +174,7 @@ sub transaction {
 }
 
 sub create_sql {
-    my ($self) = @_;
+    my ($self, @tables) = @_;
 
     $self->_connect();
 
@@ -182,21 +182,24 @@ sub create_sql {
 
     my $meta = $self->get_all_meta();
 
-    $SQL .= join("\n\n", map {$self->$_->create_sql()} $self->_sorted_tables(keys(%{$meta->{'tables'}})))
+    $SQL .= join("\n\n",
+        map {$self->$_->create_sql()}
+          $self->_sorted_tables(grep {!@tables || in_array($_, \@tables)} keys(%{$meta->{'tables'}})))
       if exists($meta->{'tables'});
 
     return "$SQL\n";
 }
 
 sub init_db {
-    my ($self) = @_;
+    my ($self, @tables) = @_;
 
     $self->_connect();
 
     my $meta = $self->get_all_meta();
 
     if (exists($meta->{'tables'})) {
-        $self->_do($self->$_->create_sql()) foreach $self->_sorted_tables(keys(%{$meta->{'tables'}}));
+        $self->_do($self->$_->create_sql())
+          foreach $self->_sorted_tables(grep {!@tables || in_array($_, \@tables)} keys(%{$meta->{'tables'}}));
     }
 }
 
