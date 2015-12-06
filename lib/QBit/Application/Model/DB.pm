@@ -173,6 +173,22 @@ sub transaction {
     $self->commit();
 }
 
+sub _get_list_tables {
+    my ($self, @tables) = @_;
+
+    my $meta = $self->get_all_meta();
+
+    my @result = ();
+
+    if (exists($meta->{'tables'})) {
+        my %table_names = map {$_ => TRUE} @tables;
+
+        push(@result, $self->_sorted_tables(grep {!@tables || $table_names{$_}} keys(%{$meta->{'tables'}})));
+    }
+
+    return @result;
+}
+
 sub create_sql {
     my ($self, @tables) = @_;
 
@@ -180,12 +196,7 @@ sub create_sql {
 
     my $SQL = '';
 
-    my $meta = $self->get_all_meta();
-
-    $SQL .= join("\n\n",
-        map {$self->$_->create_sql()}
-          $self->_sorted_tables(grep {!@tables || in_array($_, \@tables)} keys(%{$meta->{'tables'}})))
-      if exists($meta->{'tables'});
+    $SQL .= join("\n\n", map {$self->$_->create_sql()} $self->_get_list_tables(@tables));
 
     return "$SQL\n";
 }
@@ -195,12 +206,7 @@ sub init_db {
 
     $self->_connect();
 
-    my $meta = $self->get_all_meta();
-
-    if (exists($meta->{'tables'})) {
-        $self->_do($self->$_->create_sql())
-          foreach $self->_sorted_tables(grep {!@tables || in_array($_, \@tables)} keys(%{$meta->{'tables'}}));
-    }
+    $self->_do($self->$_->create_sql()) foreach $self->_get_list_tables(@tables);
 }
 
 sub finish {
