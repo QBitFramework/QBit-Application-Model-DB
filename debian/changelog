@@ -1,3 +1,11 @@
+libqbit-application-model-db-perl (0.008) raring; urgency=low
+
+  * delete in_array
+
+  * create_sql for one or more tables
+
+ -- Igor Sverdlov <igor-sverdlov@mail.ru>  Sun, 13 Dec 2015 00:22:54 +0300
+
 libqbit-application-model-db-perl (0.007) raring; urgency=low
 
   * Exception::DB::NoFieldsAvailable
