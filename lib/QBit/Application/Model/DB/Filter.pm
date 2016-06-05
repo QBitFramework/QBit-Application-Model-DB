@@ -1,8 +1,25 @@
+
+=head1 Name
+ 
+QBit::Application::Model::DB::Filter
+ 
+=head1 Description
+ 
+Base class for DB filters.
+
+=cut
+
 package QBit::Application::Model::DB::Filter;
 
 use qbit;
 
 use base qw(QBit::Application::Model::DB::Class);
+
+=head1 Package methods
+
+=head2 new
+ 
+=cut
 
 sub new {
     my ($class, $filter, %opts) = @_;
@@ -16,21 +33,41 @@ sub new {
     return $self;
 }
 
+=head2 and
+ 
+=cut
+
 sub and {
     $_[0]->_add($_[1], type => 'AND');
 }
+
+=head2 or
+ 
+=cut
 
 sub or {
     $_[0]->_add($_[1], type => 'OR');
 }
 
+=head2 and_not
+ 
+=cut
+
 sub and_not {
     $_[0]->_add($_[1], type => 'AND NOT');
 }
 
+=head2 or_not
+ 
+=cut
+
 sub or_not {
     $_[0]->_add($_[1], type => 'OR NOT');
 }
+
+=head2 expression
+ 
+=cut
 
 sub expression {
     my ($self) = @_;
@@ -79,3 +116,9 @@ sub _add {
 }
 
 TRUE;
+
+=pod
+
+For more information see code and test.
+
+=cut
