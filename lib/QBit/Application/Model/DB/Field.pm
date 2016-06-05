@@ -1,8 +1,39 @@
+
+=head1 Name
+ 
+QBit::Application::Model::DB::Field
+ 
+=head1 Description
+ 
+Base class for DB fields.
+
+=cut
+
 package QBit::Application::Model::DB::Field;
 
 use qbit;
 
 use base qw(QBit::Application::Model::DB::Class);
+
+=head1 RO accessors
+ 
+=over
+ 
+=item *
+ 
+B<name>
+
+=item *
+ 
+B<type>
+
+=item *
+ 
+B<table>
+
+=back
+ 
+=cut
 
 __PACKAGE__->mk_ro_accessors(
     qw(
@@ -11,6 +42,12 @@ __PACKAGE__->mk_ro_accessors(
       table
       )
 );
+
+=head1 Package methods
+
+=head2 init
+ 
+=cut
 
 sub init {
     my ($self) = @_;
@@ -22,6 +59,10 @@ sub init {
     $self->init_check();
 }
 
+=head2 init_check
+ 
+=cut
+
 sub init_check {
     my ($self) = @_;
 
@@ -31,6 +72,24 @@ sub init_check {
       if @mis_params;
 }
 
+=head1 Abstract methods
+ 
+=over
+ 
+=item *
+ 
+B<create_sql>
+
+=back
+ 
+=cut
+
 sub create_sql {throw 'Abstract method'}
 
 TRUE;
+
+=pod
+
+For more information see code and test.
+
+=cut

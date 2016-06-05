@@ -1,3 +1,14 @@
+
+=head1 Name
+ 
+QBit::Application::Model::DB::VirtualTable
+ 
+=head1 Description
+ 
+Base class for DB virtual tables.
+
+=cut
+
 package QBit::Application::Model::DB::VirtualTable;
 
 use qbit;
@@ -6,9 +17,31 @@ use base qw(QBit::Application::Model::DB::Class);
 
 use Sys::Hostname;
 
+=head1 RO accessors
+ 
+=over
+ 
+=item *
+ 
+B<query>
+
+=item *
+ 
+B<name>
+
+=back
+ 
+=cut
+
 __PACKAGE__->mk_ro_accessors(qw(query name));
 
 my $COUNTER = 0;
+
+=head1 Package methods
+
+=head2 init
+ 
+=cut
 
 sub init {
     my ($self) = @_;
@@ -23,6 +56,10 @@ sub init {
     $self->{'name'} ||= join('_', 'vt', hostname, $$, $COUNTER++);
 }
 
+=head2 fields
+ 
+=cut
+
 sub fields {
     my ($self) = @_;
 
@@ -34,6 +71,10 @@ sub fields {
 
     return \@fields;
 }
+
+=head2 get_sql_with_data
+ 
+=cut
 
 sub get_sql_with_data {
     my ($self, %opts) = @_;
@@ -48,3 +89,9 @@ sub _fields_hs {
 }
 
 TRUE;
+
+=pod
+
+For more information see code and test.
+
+=cut

@@ -1,6 +1,16 @@
 package Exception::DB::NoFieldsAvailable;
 use base qw(Exception::DB);
 
+=head1 Name
+ 
+QBit::Application::Model::DB::Query
+ 
+=head1 Description
+ 
+Base class for DB queries.
+
+=cut
+
 package QBit::Application::Model::DB::Query;
 
 use qbit;
@@ -9,7 +19,29 @@ use base qw(QBit::Application::Model::DB::Class);
 
 use QBit::Application::Model::DB::VirtualTable;
 
+=head1 Abstract methods
+
+=over
+
+=item
+
+B<_found_rows>
+
+=back
+
+=cut
+
 __PACKAGE__->abstract_methods(qw(_found_rows));
+
+=head1 Package methods
+
+=head2 init
+
+B<No arguments.>
+
+Method called from L</new> before return object.
+ 
+=cut
 
 sub init {
     my ($self) = @_;
@@ -19,6 +51,54 @@ sub init {
     delete($self->{$_}) foreach grep {/__.+__/} keys(%$self);
 }
 
+=head2 select
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<%opts> - options with keys
+
+=over
+
+=item *
+
+B<table> - object
+
+=item *
+
+B<fields> (optional, default: all fields)
+
+=item *
+
+B<filter> (optional)
+
+=back
+
+=back
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$query> - object
+
+=back
+
+B<Example:>
+
+  my $query = $app->db->query->select(
+      table  => $app->db->users,
+      fields => [qw(id login)],
+      filter => {id => 3},
+  );
+  
+=cut
+
 sub select {
     my ($self, %opts) = @_;
 
@@ -26,6 +106,68 @@ sub select {
 
     return $self->_add_table(%opts);
 }
+
+=head2 join
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<%opts> - options with keys
+
+=over
+
+=item *
+
+B<table> - object
+
+=item *
+
+B<alias> (optional)
+
+=item *
+
+B<fields> (optional, default: all fields)
+
+=item *
+
+B<filter> (optional)
+
+=item *
+
+B<join_type> (optional, default: 'INNER JOIN')
+
+=item *
+
+B<join_on> (optional, default: use foreign keys)
+
+=back
+
+=back
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$query> - object
+
+=back
+
+B<Example:>
+
+  my $join_query = $query->join(
+      table     => $app->db->fio,
+      fields    => [qw(name surname)],
+      filter    => ['name' => 'LIKE' => \'Max'],
+      join_type => 'INNER JOIN',
+      join_on   => ['user_id' => '=' => {'id' => $app->db->users}],
+  );
+ 
+=cut
 
 sub join {
     my ($self, %opts) = @_;
@@ -81,17 +223,57 @@ sub join {
     return $self->_add_table(%opts);
 }
 
+=head2 left_join
+
+join_type => 'LEFT JOIN'
+ 
+=cut
+
 sub left_join {
     my ($self, %opts) = @_;
 
     return $self->join(%opts, join_type => 'LEFT JOIN');
 }
 
+=head2 right_join
+
+join_type => 'RIGHT JOIN'
+ 
+=cut
+
 sub right_join {
     my ($self, %opts) = @_;
 
     return $self->join(%opts, join_type => 'RIGHT JOIN');
 }
+
+=head2 group_by
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<@fields>
+
+=back
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$query> - object
+
+=back
+
+B<Example:>
+
+  my $group_query = $query->group_by(qw(name surname));
+ 
+=cut
 
 sub group_by {
     my ($self, @group_by) = @_;
@@ -109,6 +291,34 @@ sub group_by {
     return $self;
 }
 
+=head2 order_by
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<@fields> - fields or reference to array
+
+=back
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$query> - object
+
+=back
+
+B<Example:>
+
+  my $order_query = $query->order_by('id', ['login', 1]);
+ 
+=cut
+
 sub order_by {
     my ($self, @order_by) = @_;
 
@@ -116,6 +326,34 @@ sub order_by {
 
     return $self;
 }
+
+=head2 limit
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<@limit>
+
+=back
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$query> - object
+
+=back
+
+B<Example:>
+
+  my $limit_query = $query->limit(100, 200);
+ 
+=cut
 
 sub limit {
     my ($self, @params) = @_;
@@ -125,6 +363,26 @@ sub limit {
     return $self;
 }
 
+=head2 distinct
+
+B<No arguments.>
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$query> - object
+
+=back
+
+B<Example:>
+
+  my $distinct_query = $query->distinct();
+ 
+=cut
+
 sub distinct {
     my ($self) = @_;
 
@@ -132,6 +390,52 @@ sub distinct {
 
     return $self;
 }
+
+=head2 union
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<$query> - object
+
+=item *
+
+B<%opts> - options with keys
+
+=over
+
+=item *
+
+B<all> - boolean (optional, default: FALSE)
+
+=back
+
+=back
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$query> - object
+
+=back
+
+B<Example:>
+
+  my $union_query = $query->union(
+      $app->db->query->select(
+          table => $app->db->people,
+          fields => [qw(id login name surname)]
+      ),
+      all => FALSE,
+  );
+ 
+=cut
 
 sub union {
     my ($self, $query, %opts) = @_;
@@ -145,11 +449,45 @@ sub union {
     return $self;
 }
 
+=head2 union_all
+
+all => TRUE
+ 
+=cut
+
 sub union_all {
     my ($self, @params) = @_;
 
     return $self->union(@params, all => TRUE);
 }
+
+=head2 calc_rows
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<$flag> - boolean
+
+=back
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$query> - object
+
+=back
+
+B<Example:>
+
+  my $calc_rows_query = $query->calc_rows(TRUE);
+ 
+=cut
 
 sub calc_rows {
     my ($self, $flag) = @_;
@@ -159,6 +497,34 @@ sub calc_rows {
     return $self;
 }
 
+=head2 all_langs
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<$flag> - boolean
+
+=back
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$query> - object
+
+=back
+
+B<Example:>
+
+  my $all_langs_query = $query->all_langs(TRUE);
+ 
+=cut
+
 sub all_langs {
     my ($self, $flag) = @_;
 
@@ -166,6 +532,26 @@ sub all_langs {
 
     return $self;
 }
+
+=head2 for_update
+
+B<No arguments.>
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$query> - object
+
+=back
+
+B<Example:>
+
+  my $for_update_query = $query->for_update();
+ 
+=cut
 
 sub for_update {
     my ($self) = @_;
@@ -175,7 +561,47 @@ sub for_update {
     return $self;
 }
 
+=head2 filter
+ 
+=cut
+
 sub filter {shift->db->filter(@_)}
+
+=head2 get_sql_with_data
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<%opts> - options with keys
+
+=over
+
+=item *
+
+B<offset> - number (optional, default: 0)
+
+=back
+
+=back
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$sql> - string
+
+=back
+
+B<Example:>
+
+  my $sql = $query->get_sql_with_data();
+ 
+=cut
 
 sub get_sql_with_data {
     my ($self, %opts) = @_;
@@ -210,7 +636,7 @@ sub get_sql_with_data {
         }
     }
 
-    unless(%all_fields) {
+    unless (%all_fields) {
         throw Exception::DB::NoFieldsAvailable;
     }
 
@@ -300,6 +726,26 @@ sub get_sql_with_data {
     return ($sql, @sql_data);
 }
 
+=head2 get_all
+
+B<No arguments.>
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$data> - reference to array
+
+=back
+
+B<Example:>
+
+  my $data = $query->get_all();
+   
+=cut
+
 sub get_all {
     my ($self) = @_;
 
@@ -312,6 +758,26 @@ sub get_all {
 
     return $res;
 }
+
+=head2 found_rows
+
+B<No arguments.>
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$bool>
+
+=back
+
+B<Example:>
+
+  my $bool = $query->found_rows();
+ 
+=cut
 
 sub found_rows {
     my ($self) = @_;
@@ -566,3 +1032,9 @@ sub _field_to_sql {
 }
 
 TRUE;
+
+=pod
+
+For more information see code and test.
+
+=cut

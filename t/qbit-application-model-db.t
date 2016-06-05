@@ -1,5 +1,9 @@
+#!/usr/bin/perl
+
 use qbit;
-use lib 't/lib';
+
+use lib::abs qw(../lib ../t_lib);
+
 use Test::More tests => 26;
 use Test::Differences;
 

@@ -1,8 +1,47 @@
+
+=head1 Name
+ 
+QBit::Application::Model::DB::Table
+ 
+=head1 Description
+ 
+Base class for DB tables.
+
+=cut
+
 package QBit::Application::Model::DB::Table;
 
 use qbit;
 
 use base qw(QBit::Application::Model::DB::Class);
+
+=head1 RO accessors
+ 
+=over
+ 
+=item *
+ 
+B<name>
+
+=item *
+ 
+B<inherits>
+
+=item *
+ 
+B<primary_key>
+
+=item *
+ 
+B<indexes>
+
+=item *
+ 
+B<foreign_keys>
+
+=back
+ 
+=cut
 
 __PACKAGE__->mk_ro_accessors(
     qw(
@@ -13,6 +52,42 @@ __PACKAGE__->mk_ro_accessors(
       foreign_keys
       )
 );
+
+=head1 Abstract methods
+
+=over
+
+=item
+
+B<create_sql>
+
+=item
+
+B<add_multi>
+
+=item
+
+B<add>
+
+=item
+
+B<edit>
+
+=item
+
+B<delete>
+
+=item
+
+B<_get_field_object>
+
+=item
+
+B<_convert_fk_auto_type>
+
+=back
+
+=cut
 
 __PACKAGE__->abstract_methods(
     qw(
@@ -25,6 +100,16 @@ __PACKAGE__->abstract_methods(
       _convert_fk_auto_type
       )
 );
+
+=head1 Package methods
+
+=head2 init
+
+B<No arguments.>
+
+Method called from L</new> before return object.
+ 
+=cut
 
 sub init {
     my ($self) = @_;
@@ -52,17 +137,126 @@ sub init {
     }
 }
 
+=head2 fields
+
+B<No arguments.>
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$fields> - reference to array of objects (QBit::Application::Model::DB::Field)
+
+=back
+
+B<Example:>
+
+  my $fields = $app->db->users->fields();
+ 
+=cut
+
 sub fields {
     my ($self) = @_;
 
     return [(map {@{$self->db->$_->fields()}} @{$self->inherits || []}), @{$self->{'fields'}}];
 }
 
+=head2 fields
+
+B<No arguments.>
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<@field_names>
+
+=back
+
+B<Example:>
+
+  my @field_names = $app->db->users->field_names();
+ 
+=cut
+
 sub field_names {
     my ($self) = @_;
 
     return map {$_->{'name'}} @{$self->fields};
 }
+
+=head2 get_all
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<%opts> - options with keys
+
+=over
+
+=item *
+
+B<fields>
+
+=item *
+
+B<filter>
+
+=item *
+
+B<group_by>
+
+=item *
+
+B<order_by>
+
+=item *
+
+B<limit>
+
+=item *
+
+B<distinct>
+
+=item *
+
+B<for_update>
+
+=item *
+
+B<all_langs>
+
+=back
+
+=back
+
+For more information see QBit::Application::Model::DB::Query::get_all
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$data> - reference to array
+
+=back
+
+B<Example:>
+
+  my $data = $app->db->users->get_all(
+      fields => [qw(id login)],
+      filter => {id => 3},
+  );
+
+=cut
 
 sub get_all {
     my ($self, %opts) = @_;
@@ -91,6 +285,56 @@ sub get_all {
     return $query->get_all();
 }
 
+=head2 get
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<$id> - scalar or hash
+
+=item *
+
+B<%opts> - options with keys
+
+=over
+
+=item *
+
+B<fields>
+
+=item *
+
+B<for_update>
+
+=item *
+
+B<all_langs>
+
+=back
+
+=back
+
+For more information see QBit::Application::Model::DB::Query::get_all
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$data> - reference to hash
+
+=back
+
+B<Example:>
+
+  my $data = $app->db->users->get(3, fields => [qw(id login)],);
+
+=cut
+
 sub get {
     my ($self, $id, %opts) = @_;
 
@@ -108,17 +352,53 @@ sub get {
     return $self->get_all(%opts, filter => {map {$_ => $id->{$_}} @{$self->primary_key}})->[0];
 }
 
+=head2 truncate
+
+B<No arguments.>
+
+Truncate table.
+
+B<Example:>
+
+  $app->db->users->truncate();
+ 
+=cut
+
 sub truncate {
     my ($self) = @_;
 
     $self->db->_do('TRUNCATE TABLE ' . $self->quote_identifier($self->name));
 }
 
+=head2 default_fields
+
+You can redefine this method in your Model.
+ 
+=cut
+
 sub default_fields { }
+
+=head2 default_primary_key
+
+You can redefine this method in your Model.
+ 
+=cut
 
 sub default_primary_key { }
 
+=head2 default_indexes
+
+You can redefine this method in your Model.
+ 
+=cut
+
 sub default_indexes { }
+
+=head2 default_foreign_keys
+
+You can redefine this method in your Model.
+ 
+=cut
 
 sub default_foreign_keys { }
 
@@ -155,6 +435,34 @@ sub _pkeys_or_filter_to_filter {
     return $pkeys_or_filter;
 }
 
+=head2 have_fields
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<$fields> - reference to array
+
+=back
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$bool>
+
+=back
+
+B<Example:>
+
+  my $bool = $app->db->users->have_fields([qw(id login)]);
+
+=cut
+
 sub have_fields {
     my ($self, $fields) = @_;
 
@@ -166,3 +474,9 @@ sub have_fields {
 }
 
 TRUE;
+
+=pod
+
+For more information see code and test.
+
+=cut

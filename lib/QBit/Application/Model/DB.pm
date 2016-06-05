@@ -4,6 +4,34 @@ use base qw(Exception);
 package Exception::DB::DuplicateEntry;
 use base qw(Exception::DB);
 
+=head1 Name
+ 
+QBit::Application::Model::DB - base class for DB.
+ 
+=head1 Description
+ 
+Base class for working with databases.
+
+=head1 GitHub
+
+https://github.com/QBitFramework/QBit-Application-Model-DB
+
+=head1 Install
+
+=over
+ 
+=item *
+
+cpanm QBit::Application::Model::DB
+
+=item *
+
+apt-get install libqbit-application-model-db-perl (http://perlhub.ru/)
+
+=back
+ 
+=cut
+
 package QBit::Application::Model::DB;
 
 use qbit;
@@ -12,9 +40,101 @@ use base qw(QBit::Application::Model);
 
 use DBI;
 
+=head1 Debug
+
+  $QBit::Application::Model::DB::DEBUG = TRUE;
+
+=cut
+
 our $DEBUG = FALSE;
 
+=head1 Abstract methods
+ 
+=over
+ 
+=item *
+ 
+B<query>
+
+=item *
+ 
+B<filter>
+
+=item *
+ 
+B<_get_table_object>
+
+=item *
+ 
+B<_create_sql_db>
+
+=item *
+ 
+B<_connect>
+
+=item *
+ 
+B<_is_connection_error>
+ 
+=back
+ 
+=cut
+
 __PACKAGE__->abstract_methods(qw(query filter _get_table_object _create_sql_db _connect _is_connection_error));
+
+=head1 Package methods
+ 
+=head2 meta
+ 
+B<Arguments:>
+ 
+=over
+ 
+=item
+ 
+B<%meta> - meta information about database
+ 
+=back
+
+B<Example:>
+
+  package Test::DB;
+
+  use qbit;
+
+  use base qw(QBit::Application::Model::DB);
+  
+  my $meta = {
+      tables => {
+          users => {
+              fields => [
+                  {name => 'id',        type => 'INT',      unsigned => 1, not_null => 1, autoincrement => 1,},
+                  {name => 'create_dt', type => 'DATETIME', not_null => 1,},
+                  {name => 'login',     type => 'VARCHAR',  length => 255, not_null => 1,},
+              ],
+              primary_key => [qw(id)],
+              indexes     => [{fields => [qw(login)], unique => 1},],
+          },
+       
+          fio => {
+              fields => [
+                  {name => 'user_id'},
+                  {name => 'name',    type => 'VARCHAR', length => 255,},
+                  {name => 'midname', type => 'VARCHAR', length => 255,},
+                  {name => 'surname', type => 'VARCHAR', length => 255,},
+              ],
+              foreign_keys => [[[qw(user_id)] => 'users' => [qw(id)]]]
+          },
+      },
+  };
+
+  __PACKAGE__->meta($meta);
+  
+in Appplication.pm
+
+  use Test::DB accessor => 'db';
+
+=cut
 
 sub meta {
     my ($package, %meta) = @_;
@@ -27,6 +147,34 @@ sub meta {
     my $pkg_stash = package_stash(ref($package) || $package);
     $pkg_stash->{'__META__'} = \%meta;
 }
+
+=head2 get_all_meta
+ 
+B<Arguments:>
+
+=over
+ 
+=item
+ 
+B<$package> - package object or name (optional)
+
+=back
+
+B<Return values:>
+
+=over
+
+=item
+
+B<$meta> - meta information about database
+
+=back
+
+B<Example:>
+
+  my $meta = $app->db->get_all_meta('Test::DB');
+
+=cut
 
 sub get_all_meta {
     my ($self, $package) = @_;
@@ -43,6 +191,14 @@ sub get_all_meta {
 
     return $meta;
 }
+
+=head2 init
+ 
+B<No arguments.>
+ 
+Method called from L</new> before return object.
+ 
+=cut
 
 sub init {
     my ($self) = @_;
@@ -96,6 +252,34 @@ sub init {
     $self->{'__SAVEPOINTS__'} = 0;
 }
 
+=head2 quote
+ 
+B<Arguments:>
+
+=over
+ 
+=item
+ 
+B<$name> - string
+
+=back
+
+B<Return values:>
+
+=over
+
+=item
+
+B<$quoted_name> - quoted string
+
+=back
+
+B<Example:>
+
+  my $quoted_name = $app->db->quote('users'); # 'users'
+
+=cut
+
 sub quote {
     my ($self, $name) = @_;
 
@@ -109,6 +293,34 @@ sub quote {
 
     return $res;
 }
+
+=head2 quote_identifier
+ 
+B<Arguments:>
+
+=over
+ 
+=item
+ 
+B<$name> - string
+
+=back
+
+B<Return values:>
+
+=over
+
+=item
+
+B<$quoted_name> - quoted string
+
+=back
+
+B<Example:>
+
+  my $quoted_name = $app->db->quote_identifier('users'); # "users"
+
+=cut
 
 sub quote_identifier {
     my ($self, $name) = @_;
@@ -124,6 +336,18 @@ sub quote_identifier {
     return $res;
 }
 
+=head2 begin
+ 
+B<No arguments.>
+
+start a new transaction or create new savepoint
+
+B<Example:>
+
+  $app->db->begin();
+
+=cut
+
 sub begin {
     my ($self) = @_;
 
@@ -136,6 +360,18 @@ sub begin {
     ++$self->{'__SAVEPOINTS__'};
 }
 
+=head2 commit
+ 
+B<No arguments.>
+
+commits the current transaction or release savepoint
+
+B<Example:>
+
+  $app->db->commit();
+
+=cut
+
 sub commit {
     my ($self) = @_;
 
@@ -145,6 +381,18 @@ sub commit {
       ? $self->_do('RELEASE SAVEPOINT SP' . $self->{'__SAVEPOINTS__'})
       : $self->_do('COMMIT');
 }
+
+=head2 rollback
+ 
+B<No arguments.>
+
+rolls back the current transaction or savepoint
+
+B<Example:>
+
+  $app->db->rollback();
+
+=cut
 
 sub rollback {
     my ($self) = @_;
@@ -156,6 +404,27 @@ sub rollback {
       ? $self->_do('ROLLBACK TO SAVEPOINT SP' . $self->{'__SAVEPOINTS__'})
       : $self->_do('ROLLBACK');
 }
+
+=head2 transaction
+ 
+B<Arguments:>
+
+=over
+ 
+=item
+ 
+B<$sub> - reference to sub
+
+=back
+
+B<Example:>
+
+  $app->db->transaction(sub {
+      # work with db
+      ...
+  });
+
+=cut
 
 sub transaction {
     my ($self, $sub) = @_;
@@ -189,6 +458,34 @@ sub _get_list_tables {
     return @result;
 }
 
+=head2 create_sql
+ 
+B<Arguments:>
+
+=over
+ 
+=item
+ 
+B<@tables> - table names (optional)
+
+=back
+
+B<Return values:>
+
+=over
+
+=item
+
+B<$sql> - sql
+
+=back
+
+B<Example:>
+
+  my $sql = $app->db->create_sql(qw(users));
+
+=cut
+
 sub create_sql {
     my ($self, @tables) = @_;
 
@@ -201,6 +498,24 @@ sub create_sql {
     return "$SQL\n";
 }
 
+=head2 init_db
+ 
+B<Arguments:>
+
+=over
+ 
+=item
+ 
+B<@tables> - table names (optional)
+
+=back
+
+B<Example:>
+
+  $app->db->init_db(qw(users));
+
+=cut
+
 sub init_db {
     my ($self, @tables) = @_;
 
@@ -208,6 +523,18 @@ sub init_db {
 
     $self->_do($self->$_->create_sql()) foreach $self->_get_list_tables(@tables);
 }
+
+=head2 finish
+ 
+B<No arguments.>
+
+Check that transaction closed
+
+B<Example:>
+
+  $app->db->finish();
+
+=cut
 
 sub finish {
     my ($self) = @_;
@@ -373,3 +700,21 @@ sub _sub_with_connected_dbh {
 }
 
 TRUE;
+
+=head1 Internal packages
+ 
+=over
+ 
+=item B<L<QBit::Application::Model::DB::Class>> - base class for DB modules;
+ 
+=item B<L<QBit::Application::Model::DB::Field>> - base class for DB fields;
+ 
+=item B<L<QBit::Application::Model::DB::Filter>> - base class for DB filters;
+ 
+=item B<L<QBit::Application::Model::DB::Query>> - base class for DB queries;
+ 
+=item B<L<QBit::Application::Model::DB::Table>> - base class for DB tables;
+ 
+=item B<L<QBit::Application::Model::DB::VirtualTable>> - base class for DB virtual tables;
+ 
+=back
