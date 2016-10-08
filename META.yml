@@ -3,9 +3,9 @@ abstract: 'Base class for working with databases'
 author:
   - 'Sergei Svistunov <sergei-svistunov@yandex.ru>'
 build_requires:
+  QBit::Application: 0
   Test::Differences: 0
   Test::More: 0
-  TestAppDB: 0
   lib::abs: 0
 configure_requires:
   ExtUtils::MakeMaker: 0
@@ -25,4 +25,4 @@ requires:
   base: 0
   qbit: 0
   strict: 0
-version: 0.009
+version: 0.010

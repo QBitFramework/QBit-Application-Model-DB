@@ -1,3 +1,9 @@
+libqbit-application-model-db-perl (0.010) raring; urgency=low
+
+  * t_lib -> t/lib
+
+ -- Igor Sverdlov <igor-sverdlov@mail.ru>  Sat, 08 Oct 2016 22:58:10 +0300
+
 libqbit-application-model-db-perl (0.009) raring; urgency=low
 
   * added README.md
