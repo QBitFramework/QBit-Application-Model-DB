@@ -2,7 +2,7 @@
 
 use qbit;
 
-use lib::abs qw(../lib ../t_lib);
+use lib::abs qw(../lib ./lib);
 
 use Test::More tests => 26;
 use Test::Differences;
