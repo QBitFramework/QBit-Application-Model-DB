@@ -4,6 +4,8 @@ use qbit;
 
 use base qw(QBit::Application::Model::DB);
 
+use DBD::Mock;
+
 use QBit::Application::Model::DB::Filter;
 use Test::DB::Table;
 use QBit::Application::Model::DB::Query;
