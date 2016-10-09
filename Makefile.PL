@@ -26,12 +26,13 @@ my %WriteMakefileArgs = (
     "strict" => 0
   },
   "TEST_REQUIRES" => {
+    "DBD::Mock" => 0,
     "QBit::Application" => 0,
     "Test::Differences" => 0,
     "Test::More" => 0,
     "lib::abs" => 0
   },
-  "VERSION" => "0.010",
+  "VERSION" => "0.011",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -39,6 +40,7 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
+  "DBD::Mock" => 0,
   "DBI" => 0,
   "Exception" => 0,
   "QBit::Application" => 0,
