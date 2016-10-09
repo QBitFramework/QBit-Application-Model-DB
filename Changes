@@ -3,8 +3,38 @@ Changes from 2015-10-10 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.011 at 2016-10-09 08:53:21 +0000
+version 0.012 at 2016-10-09 12:09:01 +0000
 ------------------------------------------
+
+  Change: 2c330c7192a9346963254cbe35acc76285cff7c1
+  Author: Igor <igor-sverdlov@mail.ru>
+  Date : 2016-10-09 16:07:52 +0000
+
+    Merge pull request #14 from Madskill/fix_test
+
+    Fix test 
+
+  Change: f8c91ed9b89914c03135e607a3c69f0d47cf814c
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-10-09 15:05:31 +0000
+
+    use TestTimeLog 
+
+  Change: cd14b8396e14401edf00e2427c61325e19e581de
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-10-09 14:56:38 +0000
+
+    added TestTimeLog 
+
+------------------------------------------
+version 0.011 at 2016-10-09 08:53:52 +0000
+------------------------------------------
+
+  Change: 3bcaac11c3dd018f194564d62aa748c0d9966441
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-10-09 11:53:52 +0000
+
+    Version 0.011 
 
   Change: 2a4698f36f9e83fab1b13002623c6eb08df1c7f8
   Author: Igor <igor-sverdlov@mail.ru>
