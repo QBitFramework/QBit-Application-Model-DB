@@ -1,10 +1,34 @@
 ==================================================
-Changes from 2015-10-10 00:00:00 +0000 to present.
+Changes from 2015-12-02 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.012 at 2016-10-09 12:09:01 +0000
+version 0.013 at 2016-12-01 23:32:45 +0000
 ------------------------------------------
+
+  Change: 64ea918975444d5ab89de6cd537ebd9ba826ebe1
+  Author: Igor <igor-sverdlov@mail.ru>
+  Date : 2016-12-02 02:31:54 +0000
+
+    Merge pull request #15 from Madskill/delete_reconnect
+
+    deleted connect if transaction 
+
+  Change: 7835456378d87ede684439d37eaa6ebbd7439a0b
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-12-02 02:28:51 +0000
+
+    deleted connect if transaction 
+
+------------------------------------------
+version 0.012 at 2016-10-09 12:09:28 +0000
+------------------------------------------
+
+  Change: 6fc5d082e717a99817f95fe48d73c2fcd189e24f
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-10-09 15:09:28 +0000
+
+    Version 0.012 
 
   Change: 2c330c7192a9346963254cbe35acc76285cff7c1
   Author: Igor <igor-sverdlov@mail.ru>
@@ -135,5 +159,5 @@ version 0.008 at 2015-12-12 21:23:05 +0000
     create_sql for one or more tables 
 
 ================================================
-Plus 7 releases after 2015-10-10 00:00:00 +0000.
+Plus 7 releases after 2015-12-02 00:00:00 +0000.
 ================================================

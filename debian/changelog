@@ -1,3 +1,9 @@
+libqbit-application-model-db-perl (0.013) raring; urgency=low
+
+  * deleted connect if transaction
+
+ -- Igor Sverdlov <igor-sverdlov@mail.ru>  Fri, 02 Dec 2016 02:32:45 +0300
+
 libqbit-application-model-db-perl (0.012) raring; urgency=low
 
   * use TestTimeLog
