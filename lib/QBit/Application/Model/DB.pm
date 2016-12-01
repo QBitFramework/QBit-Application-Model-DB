@@ -351,8 +351,6 @@ B<Example:>
 sub begin {
     my ($self) = @_;
 
-    $self->_connect();
-
     $self->{'__SAVEPOINTS__'} == 0
       ? $self->_do('BEGIN')
       : $self->_do('SAVEPOINT SP' . $self->{'__SAVEPOINTS__'});
@@ -375,8 +373,6 @@ B<Example:>
 sub commit {
     my ($self) = @_;
 
-    $self->_connect();
-
     --$self->{'__SAVEPOINTS__'}
       ? $self->_do('RELEASE SAVEPOINT SP' . $self->{'__SAVEPOINTS__'})
       : $self->_do('COMMIT');
@@ -396,8 +392,6 @@ B<Example:>
 
 sub rollback {
     my ($self) = @_;
-
-    $self->_connect();
 
     my $sql =
       --$self->{'__SAVEPOINTS__'}
@@ -672,7 +666,7 @@ sub _sub_with_connected_dbh {
     my @res;
 
     try {
-        $self->_connect();
+        $self->_connect() unless $self->{'__SAVEPOINTS__'};
         @res = $sub->(@{$params || []});
     }
     catch {
