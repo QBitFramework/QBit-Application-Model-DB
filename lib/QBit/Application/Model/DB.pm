@@ -1,9 +1,3 @@
-package Exception::DB;
-use base qw(Exception);
-
-package Exception::DB::DuplicateEntry;
-use base qw(Exception::DB);
-
 =head1 Name
  
 QBit::Application::Model::DB - base class for DB.
@@ -37,6 +31,9 @@ package QBit::Application::Model::DB;
 use qbit;
 
 use base qw(QBit::Application::Model);
+
+use Exception::DB;
+use Exception::DB::DuplicateEntry;
 
 use DBI;
 
@@ -429,7 +426,13 @@ sub transaction {
     }
     catch {
         my $ex = shift;
-        $self->rollback();
+
+        unless ($ex->isa('Exception::DB')) {
+            $self->rollback();
+        } else {
+            $self->{'__SAVEPOINTS__'} = 0;
+        }
+
         throw $ex;
     };
 
@@ -534,7 +537,8 @@ sub finish {
     my ($self) = @_;
 
     if ($self->{'__SAVEPOINTS__'}) {
-        $self->rollback() while $self->{'__SAVEPOINTS__'};
+        $self->{'__SAVEPOINTS__'} = 1;
+        $self->rollback();
         throw gettext("Unclosed transaction");
     }
 }
