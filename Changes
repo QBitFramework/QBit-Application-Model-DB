@@ -1,10 +1,34 @@
 ==================================================
-Changes from 2015-12-02 00:00:00 +0000 to present.
+Changes from 2015-12-18 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.013 at 2016-12-01 23:32:45 +0000
+version 0.014 at 2016-12-17 15:47:50 +0000
 ------------------------------------------
+
+  Change: 4f58db2540634b2ddb81f86cc68c8ad119eef436
+  Author: Igor <igor-sverdlov@mail.ru>
+  Date : 2016-12-17 18:46:58 +0000
+
+    Merge pull request #16 from Madskill/fix_transaction
+
+    fix rollback 
+
+  Change: 204b83ec7c08e95f86c6543baf66bcc277f2587a
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-12-17 18:45:15 +0000
+
+    fix rollback 
+
+------------------------------------------
+version 0.013 at 2016-12-01 23:33:04 +0000
+------------------------------------------
+
+  Change: 2d23b43399fff79bf8d7ce3398236eac3f90dfe8
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-12-02 02:33:04 +0000
+
+    Version 0.013 
 
   Change: 64ea918975444d5ab89de6cd537ebd9ba826ebe1
   Author: Igor <igor-sverdlov@mail.ru>
@@ -128,36 +152,6 @@ version 0.009 at 2016-06-05 17:45:12 +0000
 
     upload to cpan 
 
-------------------------------------------
-version 0.008 at 2015-12-12 21:23:05 +0000
-------------------------------------------
-
-  Change: f407c1a3718ee54fde612937d3f20db653e1519d
-  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
-  Date : 2015-12-13 00:23:05 +0000
-
-    Version 0.008 
-
-  Change: a2a10e3a7633320c8e914b871dab125d2f3ab9bf
-  Author: Sergei Svistunov <sergei-svistunov@yandex.ru>
-  Date : 2015-12-07 12:19:48 +0000
-
-    Merge pull request #10 from Madskill/create_sql_for_tables
-
-    create_sql and init_db for one or more tables 
-
-  Change: 22721350f0bb31892a29619103b6d8f5d5eea9b1
-  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
-  Date : 2015-12-06 23:37:43 +0000
-
-    delete in_array 
-
-  Change: 3c06e8d1b6ed954e4cab4c31fe27a4406781dc81
-  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
-  Date : 2015-12-06 21:19:22 +0000
-
-    create_sql for one or more tables 
-
 ================================================
-Plus 7 releases after 2015-12-02 00:00:00 +0000.
+Plus 8 releases after 2015-12-18 00:00:00 +0000.
 ================================================
