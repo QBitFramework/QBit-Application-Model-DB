@@ -1,3 +1,9 @@
+libqbit-application-model-db-perl (0.014) raring; urgency=low
+
+  * fix rollback
+
+ -- Igor Sverdlov <igor-sverdlov@mail.ru>  Sat, 17 Dec 2016 18:47:51 +0300
+
 libqbit-application-model-db-perl (0.013) raring; urgency=low
 
   * deleted connect if transaction
