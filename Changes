@@ -1,10 +1,40 @@
 ==================================================
-Changes from 2015-12-18 00:00:00 +0000 to present.
+Changes from 2015-12-19 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.014 at 2016-12-17 15:47:50 +0000
+version 0.015 at 2016-12-18 23:03:04 +0000
 ------------------------------------------
+
+  Change: eed3a06d0a9365303d280023f1101afd6db04ace
+  Author: Igor <igor-sverdlov@mail.ru>
+  Date : 2016-12-19 02:02:11 +0000
+
+    Merge pull request #17 from Madskill/fix_exceptions
+
+    Fix exceptions 
+
+  Change: da95faf45f98688e9a606dcbed3b63a67fccba8b
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-12-19 02:00:42 +0000
+
+    Merge remote-tracking branch 'upstream/master' into fix_exceptions 
+
+  Change: a92eb97820e036335ff7210b049884fdd5b64d5e
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-12-19 02:00:28 +0000
+
+    fix exceptions 
+
+------------------------------------------
+version 0.014 at 2016-12-17 15:48:02 +0000
+------------------------------------------
+
+  Change: 939fd3214a05e2ed5fd505b95ab59dc87210c0cd
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-12-17 18:48:02 +0000
+
+    Version 0.014 
 
   Change: 4f58db2540634b2ddb81f86cc68c8ad119eef436
   Author: Igor <igor-sverdlov@mail.ru>
@@ -153,5 +183,5 @@ version 0.009 at 2016-06-05 17:45:12 +0000
     upload to cpan 
 
 ================================================
-Plus 8 releases after 2015-12-18 00:00:00 +0000.
+Plus 8 releases after 2015-12-19 00:00:00 +0000.
 ================================================
