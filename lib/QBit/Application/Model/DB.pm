@@ -1,3 +1,4 @@
+
 =head1 Name
  
 QBit::Application::Model::DB - base class for DB.
@@ -427,10 +428,10 @@ sub transaction {
     catch {
         my $ex = shift;
 
-        unless ($ex->isa('Exception::DB')) {
-            $self->rollback();
-        } else {
+        if ($ex->isa('Exception::DB')) {
             $self->{'__SAVEPOINTS__'} = 0;
+        } else {
+            $self->rollback();
         }
 
         throw $ex;
