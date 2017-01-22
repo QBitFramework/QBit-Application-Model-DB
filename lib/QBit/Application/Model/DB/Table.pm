@@ -11,6 +11,8 @@ __PACKAGE__->mk_ro_accessors(
       primary_key
       indexes
       foreign_keys
+      collate
+      engine
       )
 );
 
