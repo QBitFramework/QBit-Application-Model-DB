@@ -1,3 +1,9 @@
+libqbit-application-model-db-perl (0.016) raring; urgency=low
+
+  * added collate and engine into accessors
+
+ -- Igor Sverdlov <igor-sverdlov@mail.ru>  Sun, 22 Jan 2017 14:55:44 +0300
+
 libqbit-application-model-db-perl (0.015) raring; urgency=low
 
   * fix exceptions
