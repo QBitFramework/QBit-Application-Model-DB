@@ -984,15 +984,20 @@ sub _field_to_sql {
         my @res    = ();
         my ($cmp1, $operator, $cmp2) = @$expr;
 
-        if (ref($cmp2) eq 'REF' && ref($$cmp2) eq 'ARRAY' && !@{$$cmp2}) {
-            return $offset . 'NULL';
-        }
-
         $expr->[1] =~ s/^\s+|\s+$//g;
         # Fix operator
         $operator = uc($operator);
         $operator =~ s/!=/<>/;
         $operator =~ s/==/=/;
+
+        if (ref($cmp2) eq 'REF' && ref($$cmp2) eq 'ARRAY' && !@{$$cmp2}) {
+            if (in_array($operator, ['<>', 'NOT IN'])) {
+                return $offset . '1';
+            } else {
+                return $offset . 'NULL';
+            }
+        }
+
         $operator = 'IS'     if $operator eq '='  && !defined($expr->[2]);
         $operator = 'IS NOT' if $operator eq '<>' && !defined($expr->[2]);
         $operator = 'IN'     if $operator eq '='  && ref($expr->[2]) eq 'REF' && ref(${$expr->[2]}) eq 'ARRAY';
