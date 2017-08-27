@@ -3,8 +3,38 @@ Changes from 2016-08-27 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.017 at 2017-08-27 08:06:04 +0000
+version 0.018 at 2017-08-27 08:23:09 +0000
 ------------------------------------------
+
+  Change: 0a2d2066b294536949816b38f96f9adaee54985a
+  Author: Igor <igor-sverdlov@mail.ru>
+  Date : 2017-08-27 11:19:47 +0000
+
+    Merge pull request #20 from Madskill/perltidy
+
+    Perltidy 
+
+  Change: 09aad761e0bbebdafcf2fb61fc1b173e39ce1038
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2017-08-27 11:18:16 +0000
+
+    Merge remote-tracking branch 'upstream/master' into perltidy 
+
+  Change: 1231c568a5faf0fed87e4c70dd6e8c350a1a3fbc
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2017-08-27 11:17:17 +0000
+
+    perltidy and use new methods in test 
+
+------------------------------------------
+version 0.017 at 2017-08-27 08:06:31 +0000
+------------------------------------------
+
+  Change: dc51ce4cdf1f34431cdc856882533f375a129a20
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2017-08-27 11:06:31 +0000
+
+    Version 0.017 
 
   Change: e3ce505231f2d0a481e52a25d23d3efb8674a93f
   Author: Igor <igor-sverdlov@mail.ru>
