@@ -118,7 +118,7 @@ sub init {
 
     $self->SUPER::init();
 
-    throw gettext('Required opt \"fields\" ')
+    throw gettext('Required option "fields"')
       unless $self->{'fields'};
 
     foreach my $field (@{$self->{'fields'}}) {    # Если нет типа, ищем тип в foreign_keys
