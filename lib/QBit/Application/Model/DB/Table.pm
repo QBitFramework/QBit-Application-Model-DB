@@ -372,6 +372,42 @@ sub truncate {
     $self->db->_do('TRUNCATE TABLE ' . $self->quote_identifier($self->name));
 }
 
+=head2 drop
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<%opts> - options with keys
+
+=over
+
+=item *
+
+B<if_exists> - added 'IF EXISTS'
+
+=item *
+
+=back
+
+=back
+
+B<Example:>
+
+  $app->db->users->drop(); # DROP TABLE `users`;
+
+  $app->db->users->drop(if_exists => TRUE); # DROP TABLE IF EXISTS `users`;
+
+=cut
+
+sub drop {
+    my ($self, %opts) = @_;
+
+    $self->db->_do('DROP TABLE ' . ($opts{'if_exists'} ? 'IF EXISTS ' : '') . $self->quote_identifier($self->name));
+}
+
 =head2 default_fields
 
 You can redefine this method in your Model.
