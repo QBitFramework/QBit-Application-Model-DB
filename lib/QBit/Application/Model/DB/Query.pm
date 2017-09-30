@@ -291,6 +291,42 @@ sub group_by {
     return $self;
 }
 
+=head2 having
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<$expression>
+
+=back
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$query> - object
+
+=back
+
+B<Example:>
+
+  my $query_with_having = $query->having([cnt => '>=' => \100]);
+
+=cut
+
+sub having {
+    my ($self, $expression) = @_;
+
+    $self->{'__HAVING__'} = $expression;
+
+    return $self;
+}
+
 =head2 order_by
 
 B<Arguments:>
@@ -699,6 +735,16 @@ sub get_sql_with_data {
     $sql .= "\n${offset}GROUP BY " . CORE::join(', ', map {$self->quote_identifier($_)} @{$self->{'__GROUP_BY__'}})
       if exists($self->{'__GROUP_BY__'});
 
+    if (exists($self->{'__HAVING__'})) {
+        local $self->{'without_check_fields'} = {};
+        local $self->{'without_table_alias'}  = TRUE;
+
+        my ($having, @having_data) = $self->_field_to_sql(undef, $self->{'__HAVING__'}, $select_query_table);
+
+        $sql .= "\n${offset}HAVING $having";
+        push(@sql_data, @having_data) if @having_data;
+    }
+
     $sql .= $self->_after_group_by();
 
     $sql .=
@@ -869,7 +915,9 @@ sub _field_to_sql {
 
     } elsif (!ref($expr) && $expr eq '') {
         # {field_name => ''}
-        my $field = $cur_query_table->{'table'}->_fields_hs()->{$alias}
+        my $field =
+             $cur_query_table->{'table'}->_fields_hs()->{$alias}
+          || $self->{'without_check_fields'}
           || throw Exception::BadArguments gettext('Table "%s" has not field "%s"', $cur_query_table->{'table'}->name,
             $alias);
 
@@ -883,13 +931,15 @@ sub _field_to_sql {
 
     } elsif (!ref($expr)) {
         # {new_field_name => 'field_name'}
-        my $field = $cur_query_table->{'table'}->_fields_hs()->{$expr}
+        my $field =
+             $cur_query_table->{'table'}->_fields_hs()->{$expr}
+          || $self->{'without_check_fields'}
           || throw Exception::BadArguments gettext('Table "%s" has not field "%s"', $cur_query_table->{'table'}->name,
             $expr);
 
         return (
             map {
-                  $self->_get_table_alias($cur_query_table)
+                    $self->_get_table_alias($cur_query_table)
                   . $self->quote_identifier($expr . $_)
                   . (
                     defined($alias)
@@ -908,7 +958,9 @@ sub _field_to_sql {
     {
         # {alias => {field_name => 'tbl_alias'}} {alias => {field_name => $...db->tbl}}
         my $query_table = $self->_get_table([%$expr]->[1]);
-        my $field       = $query_table->{'table'}->_fields_hs()->{[%$expr]->[0]}
+        my $field =
+             $query_table->{'table'}->_fields_hs()->{[%$expr]->[0]}
+          || $self->{'without_check_fields'}
           || throw Exception::BadArguments gettext('Table "%s" has not field "%s"', $query_table->{'table'}->name,
             [%$expr]->[0]);
 
@@ -1049,7 +1101,7 @@ sub _field_to_sql {
 sub _get_table_alias {
     my ($self, $table) = @_;
 
-    return $self->quote_identifier($self->_table_alias($table)) . '.';
+    return $self->{'without_table_alias'} ? '' : $self->quote_identifier($self->_table_alias($table)) . '.';
 }
 
 TRUE;
