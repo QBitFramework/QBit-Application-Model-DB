@@ -270,9 +270,7 @@ sub get_all {
 
     $query->group_by(@{$opts{'group_by'}}) if $opts{'group_by'};
 
-    if ($opts{'having'}) {
-        throw 'Have not realized yet';
-    }
+    $query->having($opts{'having'}) if $opts{'having'};
 
     $query->order_by(@{$opts{'order_by'}}) if $opts{'order_by'};
 
