@@ -735,6 +735,8 @@ sub get_sql_with_data {
     $sql .= "\n${offset}GROUP BY " . CORE::join(', ', map {$self->quote_identifier($_)} @{$self->{'__GROUP_BY__'}})
       if exists($self->{'__GROUP_BY__'});
 
+    $sql .= $self->_after_group_by();
+
     if (exists($self->{'__HAVING__'})) {
         local $self->{'without_check_fields'} = {};
         local $self->{'without_table_alias'}  = TRUE;
@@ -744,8 +746,6 @@ sub get_sql_with_data {
         $sql .= "\n${offset}HAVING $having";
         push(@sql_data, @having_data) if @having_data;
     }
-
-    $sql .= $self->_after_group_by();
 
     $sql .=
       "\n${offset}ORDER BY "
