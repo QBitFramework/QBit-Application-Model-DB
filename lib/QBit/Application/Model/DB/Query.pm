@@ -673,7 +673,7 @@ sub get_sql_with_data {
     }
 
     unless (%all_fields) {
-        throw Exception::DB::NoFieldsAvailable;
+        throw Exception::DB::NoFieldsAvailable gettext('No fields available');
     }
 
     $sql .= "\n$offset    " . CORE::join(",\n$offset    ", map {@{$all_fields{$_}}} sort keys(%all_fields));
