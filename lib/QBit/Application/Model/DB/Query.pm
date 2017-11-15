@@ -655,6 +655,8 @@ sub get_sql_with_data {
         $sql    .= "(\n$offset";
     }
 
+    $sql .= $self->_comment() . "\n$offset" if $self->{'comment'};
+
     $sql .= 'SELECT';
 
     $sql .= ' DISTINCT' if $self->{'__DISTINCT__'};
@@ -771,6 +773,8 @@ sub get_sql_with_data {
 
     return ($sql, @sql_data);
 }
+
+sub _comment {"/* $_[0]->{'comment'} */"}
 
 =head2 get_all
 
