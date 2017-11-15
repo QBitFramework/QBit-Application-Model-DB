@@ -205,6 +205,10 @@ B<%opts> - options with keys
 
 =item *
 
+B<comment>
+
+=item *
+
 B<fields>
 
 =item *
@@ -218,6 +222,10 @@ B<group_by>
 =item *
 
 B<order_by>
+
+=item *
+
+B<offset>
 
 =item *
 
@@ -263,7 +271,7 @@ B<Example:>
 sub get_all {
     my ($self, %opts) = @_;
 
-    my $query = $self->db->query->select(
+    my $query = $self->db->query(comment => $opts{'comment'})->select(
         table => $self,
         hash_transform(\%opts, [qw(fields filter)]),
     );
@@ -274,7 +282,7 @@ sub get_all {
 
     $query->order_by(@{$opts{'order_by'}}) if $opts{'order_by'};
 
-    $query->limit($opts{'limit'}) if $opts{'limit'};
+    $query->limit($opts{'offset'} // 0, $opts{'limit'}) if $opts{'limit'};
 
     $query->distinct() if $opts{'distinct'};
 
@@ -300,6 +308,10 @@ B<$id> - scalar or hash
 B<%opts> - options with keys
 
 =over
+
+=item *
+
+B<comment>
 
 =item *
 
