@@ -296,6 +296,31 @@ sub get_all {
     return $query->get_all();
 }
 
+=head2 edit
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<$pkeys_or_filter> - perl variables or object (QBit::Application::Model::DB::filter)
+
+=item *
+
+B<$data> - reference to hash
+
+=back
+
+B<Example:>
+
+  $app->db->users->edit(1, {login => 'LoginNew'});
+  $app->db->users->edit([1], {login => 'LoginNew'});
+  $app->db->users->edit({id => 1}, {login => 'LoginNew'});
+  $app->db->users->edit($app->db->filter({login => 'Login'}), {login => 'LoginNew'});
+
+=cut
+
 sub edit {
     my ($self, $pkeys_or_filter, $data, %opts) = @_;
 
