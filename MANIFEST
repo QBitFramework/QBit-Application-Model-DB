@@ -31,4 +31,5 @@ t/lib/TestTimeLog.pm
 t/qbit-application-model-db-multiple.t
 t/qbit-application-model-db-query-comment.t
 t/qbit-application-model-db-query-having.t
+t/qbit-application-model-db-query-update.t
 t/qbit-application-model-db.t
