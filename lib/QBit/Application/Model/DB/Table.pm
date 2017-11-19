@@ -96,7 +96,6 @@ __PACKAGE__->abstract_methods(
       create_sql
       add_multi
       add
-      edit
       delete
       _get_field_object
       _convert_fk_auto_type
@@ -291,6 +290,18 @@ sub get_all {
     $query->all_langs(TRUE) if $opts{'all_langs'};
 
     return $query->get_all();
+}
+
+sub edit {
+    my ($self, $pkeys_or_filter, $data, %opts) = @_;
+
+    my $query = $self->db->query(comment => $opts{'comment'})->update(
+        table  => $self,
+        data   => $data,
+        filter => $self->_pkeys_or_filter_to_filter($pkeys_or_filter),
+    );
+
+    return $query->do();
 }
 
 =head2 get
