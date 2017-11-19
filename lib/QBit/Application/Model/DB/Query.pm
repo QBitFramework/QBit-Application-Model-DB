@@ -2,11 +2,11 @@ package Exception::DB::NoFieldsAvailable;
 use base qw(Exception::DB);
 
 =head1 Name
- 
+
 QBit::Application::Model::DB::Query
- 
+
 =head1 Description
- 
+
 Base class for DB queries.
 
 =cut
@@ -40,7 +40,7 @@ __PACKAGE__->abstract_methods(qw(_found_rows));
 B<No arguments.>
 
 Method called from L</new> before return object.
- 
+
 =cut
 
 sub init {
@@ -96,7 +96,7 @@ B<Example:>
       fields => [qw(id login)],
       filter => {id => 3},
   );
-  
+
 =cut
 
 sub select {
@@ -167,7 +167,7 @@ B<Example:>
       join_type => 'INNER JOIN',
       join_on   => ['user_id' => '=' => {'id' => $app->db->users}],
   );
- 
+
 =cut
 
 sub join {
@@ -227,7 +227,7 @@ sub join {
 =head2 left_join
 
 join_type => 'LEFT JOIN'
- 
+
 =cut
 
 sub left_join {
@@ -239,7 +239,7 @@ sub left_join {
 =head2 right_join
 
 join_type => 'RIGHT JOIN'
- 
+
 =cut
 
 sub right_join {
@@ -273,7 +273,7 @@ B<$query> - object
 B<Example:>
 
   my $group_query = $query->group_by(qw(name surname));
- 
+
 =cut
 
 sub group_by {
@@ -353,7 +353,7 @@ B<$query> - object
 B<Example:>
 
   my $order_query = $query->order_by('id', ['login', 1]);
- 
+
 =cut
 
 sub order_by {
@@ -389,7 +389,7 @@ B<$query> - object
 B<Example:>
 
   my $limit_query = $query->limit(100, 200);
- 
+
 =cut
 
 sub limit {
@@ -417,7 +417,7 @@ B<$query> - object
 B<Example:>
 
   my $distinct_query = $query->distinct();
- 
+
 =cut
 
 sub distinct {
@@ -471,7 +471,7 @@ B<Example:>
       ),
       all => FALSE,
   );
- 
+
 =cut
 
 sub union {
@@ -489,7 +489,7 @@ sub union {
 =head2 union_all
 
 all => TRUE
- 
+
 =cut
 
 sub union_all {
@@ -523,7 +523,7 @@ B<$query> - object
 B<Example:>
 
   my $calc_rows_query = $query->calc_rows(TRUE);
- 
+
 =cut
 
 sub calc_rows {
@@ -559,7 +559,7 @@ B<$query> - object
 B<Example:>
 
   my $all_langs_query = $query->all_langs(TRUE);
- 
+
 =cut
 
 sub all_langs {
@@ -587,7 +587,7 @@ B<$query> - object
 B<Example:>
 
   my $for_update_query = $query->for_update();
- 
+
 =cut
 
 sub for_update {
@@ -599,7 +599,7 @@ sub for_update {
 }
 
 =head2 filter
- 
+
 =cut
 
 sub filter {shift->db->filter(@_)}
@@ -637,7 +637,7 @@ B<$sql> - string
 B<Example:>
 
   my $sql = $query->get_sql_with_data();
- 
+
 =cut
 
 sub get_sql_with_data_for_select {
@@ -795,7 +795,7 @@ B<$data> - reference to array
 B<Example:>
 
   my $data = $query->get_all();
-   
+
 =cut
 
 sub get_all {
@@ -810,6 +810,62 @@ sub get_all {
 
     return $res;
 }
+
+=head2 update
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<%opts> - options with keys
+
+=over
+
+=item *
+
+B<table> - object
+
+=item *
+
+B<alias> - alias for table (type: string)
+
+=item *
+
+B<data> - data for update (type: reference to hash)
+
+=item *
+
+B<filter> (optional)
+
+=back
+
+=back
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$query> - object
+
+=back
+
+B<Example:>
+
+  my $query = $app->db->query->update(
+      table  => $app->db->users,
+      alias  => 'u',
+      data   => {
+          login => 'ChuckNorris',
+          date  => {NOW => []},
+      },
+      filter => {id => 3},
+  );
+
+=cut
 
 sub update {
     my ($self, %opts) = @_;
@@ -832,6 +888,28 @@ sub update {
 
     return $self;
 }
+
+=head2 do
+
+Execute query and returns results
+
+B<No arguments>
+
+B<Return values:>
+
+=over
+
+=item *
+
+B<$res> - count of a affected rows or -1
+
+=back
+
+B<Example:>
+
+  my $res = $query->do();
+
+=cut
 
 sub do {
     my ($self) = @_;
@@ -979,7 +1057,7 @@ B<$bool>
 B<Example:>
 
   my $bool = $query->found_rows();
- 
+
 =cut
 
 sub found_rows {

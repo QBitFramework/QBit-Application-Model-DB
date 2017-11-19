@@ -1,10 +1,10 @@
 
 =head1 Name
- 
+
 QBit::Application::Model::DB::Table
- 
+
 =head1 Description
- 
+
 Base class for DB tables.
 
 =cut
@@ -16,31 +16,39 @@ use qbit;
 use base qw(QBit::Application::Model::DB::Class);
 
 =head1 RO accessors
- 
+
 =over
- 
+
 =item *
- 
+
 B<name>
 
 =item *
- 
+
 B<inherits>
 
 =item *
- 
+
 B<primary_key>
 
 =item *
- 
+
 B<indexes>
 
 =item *
- 
+
 B<foreign_keys>
 
+=item *
+
+B<collate>
+
+=item *
+
+B<engine>
+
 =back
- 
+
 =cut
 
 __PACKAGE__->mk_ro_accessors(
@@ -70,10 +78,6 @@ B<add_multi>
 =item
 
 B<add>
-
-=item
-
-B<edit>
 
 =item
 
@@ -109,7 +113,7 @@ __PACKAGE__->abstract_methods(
 B<No arguments.>
 
 Method called from L</new> before return object.
- 
+
 =cut
 
 sub init {
@@ -155,7 +159,7 @@ B<$fields> - reference to array of objects (QBit::Application::Model::DB::Field)
 B<Example:>
 
   my $fields = $app->db->users->fields();
- 
+
 =cut
 
 sub fields {
@@ -181,7 +185,7 @@ B<@field_names>
 B<Example:>
 
   my @field_names = $app->db->users->field_names();
- 
+
 =cut
 
 sub field_names {
@@ -384,7 +388,7 @@ Truncate table.
 B<Example:>
 
   $app->db->users->truncate();
- 
+
 =cut
 
 sub truncate {
@@ -432,7 +436,7 @@ sub drop {
 =head2 default_fields
 
 You can redefine this method in your Model.
- 
+
 =cut
 
 sub default_fields { }
@@ -440,7 +444,7 @@ sub default_fields { }
 =head2 default_primary_key
 
 You can redefine this method in your Model.
- 
+
 =cut
 
 sub default_primary_key { }
@@ -448,7 +452,7 @@ sub default_primary_key { }
 =head2 default_indexes
 
 You can redefine this method in your Model.
- 
+
 =cut
 
 sub default_indexes { }
@@ -456,7 +460,7 @@ sub default_indexes { }
 =head2 default_foreign_keys
 
 You can redefine this method in your Model.
- 
+
 =cut
 
 sub default_foreign_keys { }
