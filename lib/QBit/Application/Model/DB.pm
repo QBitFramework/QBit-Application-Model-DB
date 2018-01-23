@@ -688,7 +688,10 @@ sub _get_all {
 sub _log_sql {
     my ($self, $sql, $params) = @_;
 
-    $sql =~ s/\?/$self->quote($_)/e foreach @{$params || []};
+    if (defined($params) && @$params) {
+        my $i = 0;
+        $sql =~ s/\?/$self->quote($params->[$i++])/eg;
+    }
 
     l $sql if $DEBUG;
 
