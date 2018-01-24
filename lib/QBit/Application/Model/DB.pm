@@ -234,7 +234,7 @@ sub init {
               if $self->can($table_name);
             {
                 no strict 'refs';
-                *{"$class::$table_name"} = sub {
+                *{$class . '::' . $table_name} = sub {
                     my ($self) = @_;
 
                     $self->{'__TABLES__'}{$table_name} = $tables{$table_name}->{'class'}->new(
