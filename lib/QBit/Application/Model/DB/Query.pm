@@ -1332,7 +1332,9 @@ sub _field_to_sql {
               )
         );
     } else {
-        throw Exception::BadArguments gettext('Bad field expression:\n%s', Dumper($expr));
+        local $Data::Dumper::Terse  = 1;
+        local $Data::Dumper::Indent = 2;
+        throw Exception::BadArguments gettext("Bad expression:\n%s", Dumper($expr));
     }
 }
 
