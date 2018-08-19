@@ -438,8 +438,6 @@ B<%opts> - options with keys
 
 B<if_exists> - added 'IF EXISTS'
 
-=item *
-
 =back
 
 =back
