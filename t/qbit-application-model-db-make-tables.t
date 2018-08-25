@@ -29,18 +29,6 @@ sub main {
 
     $app->pre_run();
 
-    $app->set_option(
-        locales => {
-            ru => {name => 'Russian', code => 'ru_RU', default => 1},
-            en => {name => 'English', code => 'en_GB'},
-            de => {name => 'German',  code => 'de_DE'}
-        }
-    );
-
-    $app->set_app_locale('ru');
-
-    $app->db->_connect;
-
     $app->db->make_tables({new_table1 => 'table1'});
 
     check_eq_table($app, 'new_table1', 'table1');
