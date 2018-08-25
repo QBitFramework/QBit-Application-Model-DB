@@ -21,7 +21,7 @@ cpanm QBit::Application::Model::DB
 
 =item *
 
-apt-get install libqbit-application-model-db-perl (http://perlhub.ru/)
+cpanm https://github.com/QBitFramework/QBit-Application-Model-DB.git
 
 =back
 
