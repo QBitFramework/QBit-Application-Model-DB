@@ -1,3 +1,9 @@
+libqbit-application-model-db-perl (0.028) raring; urgency=low
+
+  * fix version
+
+-- Igor Sverdlov <igor-sverdlov@mail.ru> Sun, 26 Aug 2018 00:33:02 +0300
+
 libqbit-application-model-db-perl (0.027) raring; urgency=low
 
   * fix tests and error message
