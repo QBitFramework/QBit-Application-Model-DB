@@ -265,8 +265,10 @@ B<Example:>
 sub make_tables {
     my ($self, $tables_meta) = @_;
 
-    my $meta;
-    my %tables;
+    my $class     = ref($self);
+    my $pkg_stash = package_stash($class);
+
+    my ($meta, %tables);
     foreach my $table_name (keys(%$tables_meta)) {
         my $table_meta = $tables_meta->{$table_name};
 
@@ -279,6 +281,10 @@ sub make_tables {
             $meta //= $self->get_all_meta();
 
             %table = %{$meta->{'tables'}{$table_name_template}};
+        }
+
+        if ($pkg_stash->{'__METHODS_CREATED__'}) {
+            $pkg_stash->{'__META__'}{'tables'}{$table_name} = {%table};
         }
 
         $table{'class'} = $self->_get_table_class(type => $table{'type'});
@@ -294,8 +300,7 @@ sub make_tables {
     $self->{'__TABLE_TREE_LEVEL__'}{$_} = $self->_table_tree_level(\%tables, $_, 0) foreach keys(%tables);
     $self->{'__TABLES__'} //= {};
 
-    my $class     = ref($self);
-    my $pkg_stash = package_stash($class);
+    my $preload_accessors = $self->app->get_option('preload_accessors');
 
     foreach my $table_name ($self->_sorted_tables(keys(%tables))) {
         throw gettext('Cannot create table object, "%s" is reserved', $table_name)
@@ -317,11 +322,7 @@ sub make_tables {
             };
         };
 
-        if ($pkg_stash->{'__METHODS_CREATED__'}) {
-            $pkg_stash->{'__META__'}{'tables'}{$table_name} = $tables{$table_name};
-        } elsif ($self->get_option('preload_accessors')) {
-            $self->$table_name;
-        }
+        $self->$table_name if $preload_accessors;
     }
 }
 
