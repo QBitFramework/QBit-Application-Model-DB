@@ -422,6 +422,54 @@ sub truncate {
     $self->db->_do('TRUNCATE TABLE ' . $self->quote_identifier($self->name));
 }
 
+=head2 alter
+
+B<Arguments:>
+
+=over
+
+=item *
+
+B<%opts> - options to alter
+
+=over
+
+=item *
+
+disable_keys
+
+=item *
+
+enable_keys
+
+=back
+
+=back
+
+B<Example:>
+
+  $app->db->users->alter(disable_keys => TRUE);
+
+  ...
+
+  $app->db->users->alter(enable_keys => TRUE);
+
+=cut
+
+sub alter {
+    my ($self, %opts) = @_;
+
+    my $sql = "ALTER TABLE\n    " . $self->quote_identifier($self->name) . "\n";
+
+    if ($opts{'disable_keys'}) {
+        $sql .= "DISABLE KEYS\n";
+    } elsif ($opts{'enable_keys'}) {
+        $sql .= "ENABLE KEYS\n";
+    }
+
+    $self->db->_do($sql);
+}
+
 =head2 create
 
 Create table in DB.
