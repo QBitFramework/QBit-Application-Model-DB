@@ -280,6 +280,9 @@ sub make_tables {
 
             $meta //= $self->get_all_meta();
 
+            throw gettext('Table "%s" not found', $table_name_template)
+              unless exists($meta->{'tables'}{$table_name_template});
+
             %table = %{$meta->{'tables'}{$table_name_template}};
         }
 
